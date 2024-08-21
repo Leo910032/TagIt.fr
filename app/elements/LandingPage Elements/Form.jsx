@@ -21,7 +21,7 @@ export default function Form() {
 
     useEffect(()=>{
         if(username !== "") {
-            if(existingUsernames.includes(username)){
+            if(existingUsernames.includes(String(username).toLowerCase())){
                 setHasError(1);
                 setCanProceed(false);
                 setErrorMessage("This username is already taken.");
@@ -74,7 +74,7 @@ export default function Form() {
                 querySnapshot.forEach((credential) => {
                     const data = credential.data();
                     const { username } = data;
-                    existingUsernames.push(username);
+                    existingUsernames.push(String(username).toLowerCase());
                 });
                 
                 setExistingUsernames(existingUsernames);
