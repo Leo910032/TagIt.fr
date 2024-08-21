@@ -10,6 +10,15 @@ export const SupportGroups = [
     },
     {
         type: 1,
+        caption: "#FreePalestine",
+        cardTitle: "War is never the answer.",
+        cardMessage: "Display a support banner to encourage your visitors to #FreePalestine, donate and discover resources, and support the right for people everywhere to live in peace.",
+        title: "War is not the answer.",
+        message: "I'm driving awareness, donations, and support to #FreePalestine, and the right for people everywhere to live in peace. Will you join me?",
+        linkTo: "https://mylinks.fabiconcept.online/freepalestine"
+    },
+    {
+        type: 2,
         caption:'#StandWithUkraine',
         cardTitle: "War is never the answer.",
         cardMessage: "Display a support banner to encourage your visitors to #StandWithUkraine, donate and discover resources, and support the right for people everywhere to live in peace.",
@@ -18,7 +27,7 @@ export const SupportGroups = [
         linkTo: "https://linktr.ee/withukraine",
     },
     {
-        type: 2,
+        type: 3,
         caption:'Anti-Racism',
         cardTitle: "Racism is an international emergency.",
         cardMessage: "Display a support banner on your Linktree allowing your visitors to donate and discover resources in support of anti-racism, justice and equality.",
@@ -27,7 +36,7 @@ export const SupportGroups = [
         linkTo: "https://linktr.ee/ACTION",
     },
     {
-        type: 3,
+        type: 4,
         caption:'Pride',
         cardTitle: "Support the LGBTQIA+ community",
         cardMessage: "Display a support banner to raise awareness and funds for the LGBTQIA+ community during Pride month.",
