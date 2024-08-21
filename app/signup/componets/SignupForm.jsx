@@ -165,8 +165,8 @@ export default function SignUpForm() {
                 querySnapshot.forEach((credential) => {
                     const data = credential.data();
                     const { username, email } = data;
-                    existingUsernames.push(username);
-                    existingEmails.push(email);
+                    existingUsernames.push(String(username).toLowerCase());
+                    existingEmails.push(String(email).toLowerCase());
                 });
                 
                 setExistingUsernames(existingUsernames);
