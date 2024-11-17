@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/1ca25cd4-ba50-437b-b86a-099c6d8d0ac0)
+
 # LinkTree Clone
 
 This project is my attempt at recreating the amazing system that Linktree has developed. I aim to use Next.js and Tailwind CSS to build the user admin side, including login and sign-up functionality, as well as the user links page.
