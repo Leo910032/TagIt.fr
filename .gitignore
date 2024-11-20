@@ -39,3 +39,6 @@ next-env.d.ts
 public/bg
 public/cards
 public/brands
+
+# F..ing annoying
+tsconfig.json
