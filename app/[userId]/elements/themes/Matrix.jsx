@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react'
 
-export default function MatrixBG({textColor = "#0f0"}) {
+export default function MatrixBG({textColor}) {
     const canvasRef = React.useRef(null);
 
     React.useEffect(() => {
@@ -22,12 +22,12 @@ export default function MatrixBG({textColor = "#0f0"}) {
 
         // Drawing function
         const draw = () => {
-            // Dark mode soft black background
-            ctx.fillStyle = '#121212'; // A soft, dark charcoal black
+            // Restore the fading effect - key to the matrix charm
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; // Slightly more opacity for clarity
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // Set letter style
-            ctx.fillStyle = textColor;
+            ctx.fillStyle = '#0F0';
             ctx.font = `${fontSize}px monospace`;
 
             // Draw falling letters
