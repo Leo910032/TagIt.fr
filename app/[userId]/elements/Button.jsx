@@ -1,7 +1,7 @@
 "use client"
 import { fireApp } from "@/important/firebase";
 import { fetchUserData } from "@/lib/fetch data/fetchUserData";
-import { colorText, hexToRgba, makeValidUrl } from "@/lib/utilities";
+import { hexToRgba, makeValidUrl } from "@/lib/utilities";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
