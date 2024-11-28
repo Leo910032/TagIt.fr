@@ -20,6 +20,7 @@ import CloudBlue from "../elements/themes/CloudBlue";
 import Rainbow from "../elements/themes/Rainbow";
 import StarryNight from "../elements/themes/StarryNight";
 import MatrixBG from "../elements/themes/Matrix";
+import Mario from "../elements/themes/Mario";
 import Blocks3D from "../elements/themes/3DBlocks";
 import CustomTheme from "../elements/themes/CustomTheme";
 
@@ -98,6 +99,7 @@ export default function BgDiv({ userId }) {
             {bgType === "Starry Night" && <StarryNight />}
             {bgType === "3D Blocks" && <Blocks3D />}
             {bgType === "Matrix" && <MatrixBG textColor={themeTextColour} />}
+            {bgType === "New Mario" && <Mario />}
             {bgType === "Custom" && <CustomTheme />}
         </BgContext.Provider>
     );
