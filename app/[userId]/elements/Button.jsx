@@ -1,7 +1,7 @@
 "use client"
 import { fireApp } from "@/important/firebase";
 import { fetchUserData } from "@/lib/fetch data/fetchUserData";
-import { hexToRgba, makeValidUrl } from "@/lib/utilities";
+import { colorText, hexToRgba, makeValidUrl } from "@/lib/utilities";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
@@ -378,6 +378,7 @@ export default function Button({ url, content, userId }) {
     }, [accentColor]);
 
     return (
+        selectedTheme !== "New Mario" ? (
         <div
             className={`${modifierClass} userBtn relative justify-between items-center flex hover:scale-[1.025] md:w-[35rem] sm:w-[30rem] w-clamp`}
             style={{...modifierStyles, borderColor: selectedTheme === "Matrix" ? `${themeTextColour}` : ""}}
@@ -394,6 +395,55 @@ export default function Button({ url, content, userId }) {
             <div onClick={()=>handleCopy(url)} className="absolute p-2 h-9 right-3 grid place-items-center aspect-square rounded-full border border-white group cursor-pointer bg-black text-white hover:scale-105 active:scale-90">
                 <FaCopy className="rotate-10 group-hover:rotate-0" />
             </div>
+        </div>)
+        :
+        (
+        <div className="userBtn relative overflow-x-hidden overflow-y-visible flex justify-between items-center h-16 md:w-[35rem] sm:w-[30rem] w-clamp">
+            {Array(9).fill("").map((_, brick_index) => (
+                <Image
+                    src={"https://linktree.sirv.com/Images/Scene/Mario/mario-brick.png"}
+                    alt="Mario Brick"
+                    width={650}
+                    key={brick_index}
+                    height={660}
+                    className="h-16 w-auto object-contain hover:-translate-y-2"
+                />
+            ))}
+            <Link
+                className={`cursor-pointer flex gap-3 items-center min-h-10 py-3 px-3 flex-1`}
+                href={makeValidUrl(url)}
+                target="_blank"
+            >
+                <div className="grid place-items-center">
+                    <Image
+                        src={"https://linktree.sirv.com/Images/Scene/Mario/mario-box.png"}
+                        alt="Mario Box"
+                        width={650}
+                        height={660}
+                        className="h-10 w-auto object-contain hover:-translate-y-2"
+                    />
+
+                    <div className="absolute">
+                        <IconDiv url={url} />
+                    </div>
+                </div>
+                <ButtonText btnFontStyle={btnFontStyle} content={(<SuperFont text={content} />)} fontClass={"MariaFont"} />
+            </Link>
+            <div onClick={() => handleCopy(url)} className="absolute p-2 h-9 right-3 grid place-items-center aspect-square rounded-full border border-white group cursor-pointer bg-black text-white hover:scale-105 active:scale-90">
+                <FaCopy className="rotate-10 group-hover:rotate-0" />
+            </div>
         </div>
+        )
     );
 }
+const colors = ['#00BFFF', '#FFFF00', '#FF0000', '#008000', '#FFA500'];
+
+const SuperFont = ({ text }) => {
+    const coloredText = text.split('').map((char, index) => (
+        <span key={index} style={{ color: colors[index % colors.length] }}>
+            {char}
+        </span>
+    ));
+
+    return <div>{coloredText}</div>;
+};
