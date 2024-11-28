@@ -22,6 +22,7 @@ export default function Button({ url, content, userId }) {
     const [btnType, setBtnType] = useState(0);
     const [btnShadowColor, setBtnShadowColor] = useState('');
     const [btnFontColor, setBtnFontColor] = useState('');
+    const [themeTextColour, setThemeTextColour] = useState("");
     const [btnColor, setBtnColor] = useState('');
     const [accentColor, setAccentColor] = useState([]);
     const [btnFontStyle, setBtnFontStyle] = useState(null);
@@ -90,10 +91,10 @@ export default function Button({ url, content, userId }) {
                 if (!docSnapshot.exists()) {
                     return;
                 }
-                const { btnType, btnShadowColor, btnFontColor, btnColor, selectedTheme, fontType } = docSnapshot.data();
+                const { btnType, btnShadowColor, btnFontColor, themeFontColor, btnColor, selectedTheme, fontType } = docSnapshot.data();
                 const fontName = availableFonts_Classic[fontType ? fontType - 1 : 0];
                 setSelectedFontClass(fontName.class);
-
+                setThemeTextColour(themeFontColor ? themeFontColor : "");
                 setBtnColor(btnColor ? btnColor : "#fff");
                 setSelectedTheme(selectedTheme);
                 setBtnFontColor(btnFontColor ? btnFontColor : "#000");
@@ -379,7 +380,7 @@ export default function Button({ url, content, userId }) {
     return (
         <div
             className={`${modifierClass} userBtn relative justify-between items-center flex hover:scale-[1.025] md:w-[35rem] sm:w-[30rem] w-clamp`}
-            style={modifierStyles}
+            style={{...modifierStyles, borderColor: selectedTheme === "Matrix" ? `${themeTextColour}` : ""}}
         >
             <Link
                 className={`cursor-pointer flex gap-3 items-center min-h-10 py-3 px-3 flex-1`}
