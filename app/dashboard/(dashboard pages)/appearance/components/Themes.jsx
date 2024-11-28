@@ -6,6 +6,7 @@ export default function Themes() {
         <div className="w-full bg-white rounded-3xl my-3 flex flex-col p-6">
             <div className="grid sm:grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] sm:gap-4 gap-2 w-full">
                 <ThemeCard />
+                <ThemeCard type={1} text={"Matrix"} pic={"https://linktree.sirv.com/Images/bg/selector-matrix.gif"} />
                 <ThemeCard type={1} text={"Pebble Blue"} pic={"https://linktree.sirv.com/Images/bg/selector-pebble-blue.png"} />
                 <ThemeCard type={1} text={"Pebble Yellow"} pic={"https://linktree.sirv.com/Images/bg/selector-pebble-yellow.adffcf319fe3cb16a9b7.png"} />
                 <ThemeCard type={1} text={"Pebble Pink"} pic={"https://linktree.sirv.com/Images/bg/selector-pebble-pink.71c34887a9c4ca41828c.png"} />
