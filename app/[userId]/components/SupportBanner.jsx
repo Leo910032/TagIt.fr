@@ -42,7 +42,8 @@ export default function SupportBanner({ userId }) {
         <>
             {supportGroupStatus && <div className="fixed bottom-0 w-screen left-0 z-[100]">
                 <div className="py-4 px-6 bg-black absolute left-0 w-full bottom-0 text-white banner flex flex-col items-center border-t border-t-green-400/50 shadow-xl" style={{
-                    color: bgType === "Matrix" ? themeTextColour : ""
+                    color: bgType === "Matrix" ? themeTextColour : "",
+                    backgroundColor: bgType === "Matrix" ? '#000905' : "",
                 }}>
                     <div className={`filter invert ${expanded ? "" : "rotate-180"} top-6 absolute right-6 cursor-pointer`}>
                         <Image

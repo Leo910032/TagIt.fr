@@ -59,8 +59,8 @@ export default function MatrixBG({textColor}) {
     }, [textColor]); // Empty dependency array means this runs once on mount
 
     return (
-        <div className="fixed h-screen w-screen z-0 top-0 left-0 overflow-hidden opacity-95">
-            <canvas ref={canvasRef} className='h-full w-full' style={{backgroundColor: '#121212'}}></canvas>
+        <div className="fixed h-screen w-screen z-0 top-0 left-0 overflow-hidden opacity-[90] bg-black">
+            <canvas ref={canvasRef} className='h-full w-full opacity-50' style={{backgroundColor: '#121212'}}></canvas>
         </div>
     );
 }
