@@ -16,6 +16,7 @@ export default function ThemeCard({ type, pic, text }) {
     }
 
     useEffect(() => {
+        if(!isSelectedTheme) return;
         switch (text) {
             case 'Lake Black':
                 setThemeColor("#fff");
@@ -26,12 +27,15 @@ export default function ThemeCard({ type, pic, text }) {
             case '3D Blocks':
                 setThemeColor("#fff");
                 break;
+            case 'Matrix':
+                setThemeColor("#0f0");
+                break;
         
             default:
                 setThemeColor("#000");
                 break;
         }
-    }, [text]);
+    }, [text, isSelectedTheme]);
     
     useEffect(() => {
         function fetchTheme() {
