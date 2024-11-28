@@ -19,6 +19,7 @@ import CloudGreen from "../elements/themes/CloudGreen";
 import CloudBlue from "../elements/themes/CloudBlue";
 import Rainbow from "../elements/themes/Rainbow";
 import StarryNight from "../elements/themes/StarryNight";
+import MatrixBG from "../elements/themes/Matrix";
 import Blocks3D from "../elements/themes/3DBlocks";
 import CustomTheme from "../elements/themes/CustomTheme";
 
@@ -32,6 +33,7 @@ export default function BgDiv({ userId }) {
     const [bgColor, setBgColor] = useState("#e8edf5");
     const [bgImage, setBgImage] = useState('');
     const [bgVideo, setBgVideo] = useState('');
+    const [themeTextColour, setThemeTextColour] = useState("");
 
     useEffect(() => {
         async function fetchProfilePicture() {
@@ -41,7 +43,7 @@ export default function BgDiv({ userId }) {
 
             onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
-                    const { profilePhoto, displayName, selectedTheme, backgroundType, gradientDirection, backgroundColor, backgroundImage, backgroundVideo } = docSnap.data();
+                    const { profilePhoto, displayName, themeFontColor, selectedTheme, backgroundType, gradientDirection, backgroundColor, backgroundImage, backgroundVideo } = docSnap.data();
 
                     setBgType(selectedTheme);
                     setBgTheme(backgroundType ? backgroundType : "Flat Colour");
@@ -49,6 +51,8 @@ export default function BgDiv({ userId }) {
                     setBgColor(backgroundColor ? backgroundColor : "#e8edf5");
                     setBgVideo(backgroundVideo);
                     setBgImage(backgroundImage);
+                    setThemeTextColour(themeFontColor ? themeFontColor : "");
+
 
                     if (profilePhoto !== '') {
                         setBackgroundPicture(
@@ -78,7 +82,6 @@ export default function BgDiv({ userId }) {
     
     return (
         <BgContext.Provider value={{bgTheme, bgColor, gradientDirection, bgImage, bgVideo}}>
-
             {bgType === "Lake White" && <LakeWhite backgroundPicture={backgroundPicture} />}
             {bgType === "Lake Black" && <LakeBlack backgroundPicture={backgroundPicture} />}
             {bgType === "Pebble Blue" && <PebbleBlue />}
@@ -94,6 +97,7 @@ export default function BgDiv({ userId }) {
             {bgType === "Rainbow" && <Rainbow />}
             {bgType === "Starry Night" && <StarryNight />}
             {bgType === "3D Blocks" && <Blocks3D />}
+            {bgType === "Matrix" && <MatrixBG textColor={themeTextColour} />}
             {bgType === "Custom" && <CustomTheme />}
         </BgContext.Provider>
     );
