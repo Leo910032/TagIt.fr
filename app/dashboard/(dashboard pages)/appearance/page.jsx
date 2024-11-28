@@ -1,5 +1,6 @@
-import Preview from "../../general components/Preview";
+// import Preview from "../../general components/Preview";
 import Backgrounds from "./components/Backgrounds";
+import ChristmasAccessories from "./components/ChristmasAccessories";
 import Buttons from "./components/Buttons";
 import FontsOptions from "./components/FontsOptions";
 import ProfileCard from "./components/ProfileCard";
@@ -26,6 +27,10 @@ export default function AppearancePage() {
             <div className="py-4">
                 <span className="text-lg font-semibold my-4">Backgrounds</span>
                 <Backgrounds />
+            </div>
+            <div className="py-4">
+                <span className="text-lg font-semibold my-4">Christmas Accessories <span className="py-1 px-3 rounded bg-green-500 text-white font-medium text-sm">New</span></span>
+                <ChristmasAccessories />
             </div>
             <div className="py-4">
                 <span className="text-lg font-semibold my-4">Buttons</span>
