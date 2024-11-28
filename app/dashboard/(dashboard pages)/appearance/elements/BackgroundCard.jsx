@@ -9,7 +9,6 @@ import { FaCheck, FaX, } from "react-icons/fa6";
 import { backgroundContext } from "../components/Backgrounds";
 import { toast } from "react-hot-toast";
 import { generateUniqueId } from "@/lib/utilities";
-import { updateProfilePhoto } from "@/lib/update data/imageUpload";
 import { backgroundImageUpload } from "@/lib/update data/backgroundImageUpload";
 import { backgroundVideoUpload } from "@/lib/update data/backgroundVideoUpload";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
