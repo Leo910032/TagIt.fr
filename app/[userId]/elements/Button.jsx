@@ -445,7 +445,7 @@ const colors = ['#fff', '#fff', '#fff', '#fff', '#fff'];
 
 const SuperFont = ({ text }) => {
     const coloredText = text.split('').map((char, index) => (
-        <span className="text-2xl drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-transparent" key={index} style={{ color: colors[index % colors.length] }}>
+        <span className="md:text-2xl sm:text-xl text-lg drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-transparent" key={index} style={{ color: colors[index % colors.length] }}>
             {char}
         </span>
     ));
