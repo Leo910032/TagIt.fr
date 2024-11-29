@@ -6,7 +6,7 @@ import { collection, doc, onSnapshot } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import IconDiv from "./IconDiv";
 import "./style/3d.css";
 import { getCompanyFromUrl } from "@/lib/BrandLinks";
@@ -28,6 +28,9 @@ export default function Button({ url, content, userId }) {
     const [btnFontStyle, setBtnFontStyle] = useState(null);
     const [selectedFontClass, setSelectedFontClass] = useState("");
     const router = useRouter();
+
+    const urlRef = useRef(null)
+
     const [modifierStyles, setModifierStyles] = useState({
         backgroundColor: "",
         color: "",
@@ -405,14 +408,16 @@ export default function Button({ url, content, userId }) {
                     alt="Mario Brick"
                     width={650}
                     key={brick_index}
+                    onClick={()=>urlRef.current?.click()}
                     height={660}
-                    className="h-16 w-auto object-contain hover:-translate-y-2"
+                    className="h-16 w-auto object-contain hover:-translate-y-2 cursor-pointe"
                 />
             ))}
             <Link
-                className={`cursor-pointer flex gap-3 items-center min-h-10 py-3 px-3 flex-1`}
+                className={` absolute top-0 left-0 z-30 pointer-events-none cursor-pointer flex gap-3 items-center min-h-10 py-3 px-3 flex-1`}
                 href={makeValidUrl(url)}
                 target="_blank"
+                ref={urlRef}
             >
                 <div className="grid place-items-center">
                     <Image
@@ -436,11 +441,11 @@ export default function Button({ url, content, userId }) {
         )
     );
 }
-const colors = ['#00BFFF', '#FFFF00', '#FF0000', '#008000', '#FFA500'];
+const colors = ['#fff', '#fff', '#fff', '#fff', '#fff'];
 
 const SuperFont = ({ text }) => {
     const coloredText = text.split('').map((char, index) => (
-        <span key={index} style={{ color: colors[index % colors.length] }}>
+        <span className="text-2xl drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-transparent" key={index} style={{ color: colors[index % colors.length] }}>
             {char}
         </span>
     ));
