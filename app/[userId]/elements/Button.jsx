@@ -410,7 +410,7 @@ export default function Button({ url, content, userId }) {
                     key={brick_index}
                     onClick={()=>urlRef.current?.click()}
                     height={660}
-                    className="h-16 w-auto object-contain hover:-translate-y-2 cursor-pointe"
+                    className="h-16 w-auto object-contain hover:-translate-y-2 cursor-pointer"
                 />
             ))}
             <Link
