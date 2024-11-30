@@ -401,7 +401,7 @@ export default function Button({ url, content, userId }) {
         </div>)
         :
         (
-        <div className="userBtn relative overflow-x-hidden overflow-y-visible flex justify-between items-center h-16 md:w-[35rem] sm:w-[30rem] w-clamp">
+        <div className="userBtn relative overflow-x-hidden overflow-y-hidden flex justify-between items-center h-16 md:w-[35rem] sm:w-[30rem] w-clamp">
             {Array(9).fill("").map((_, brick_index) => (
                 <Image
                     src={"https://linktree.sirv.com/Images/Scene/Mario/mario-brick.png"}
@@ -425,11 +425,11 @@ export default function Button({ url, content, userId }) {
                         alt="Mario Box"
                         width={650}
                         height={660}
-                        className="h-10 w-auto object-contain hover:-translate-y-2"
+                        className="h-12 w-auto object-contain hover:-translate-y-2"
                     />
 
                     <div className="absolute">
-                        <IconDiv url={url} />
+                        <IconDiv url={url} unique="Mario" />
                     </div>
                 </div>
                 <ButtonText btnFontStyle={btnFontStyle} content={(<SuperFont text={content} />)} fontClass={"MariaFont"} />
