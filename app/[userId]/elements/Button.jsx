@@ -29,6 +29,8 @@ export default function Button({ url, content, userId }) {
     const [selectedFontClass, setSelectedFontClass] = useState("");
     const router = useRouter();
 
+    const [isHovered, setIsHovered] = useState(false);
+
     const urlRef = useRef(null)
 
     const [modifierStyles, setModifierStyles] = useState({
@@ -409,6 +411,8 @@ export default function Button({ url, content, userId }) {
                     width={650}
                     key={brick_index}
                     onClick={()=>urlRef.current?.click()}
+                    onMouseEnter={()=>setIsHovered(true)}
+                    onMouseLeave={()=>setIsHovered(false)}
                     height={660}
                     className="h-16 w-auto object-contain hover:-translate-y-2 cursor-pointer"
                 />
@@ -425,14 +429,14 @@ export default function Button({ url, content, userId }) {
                         alt="Mario Box"
                         width={650}
                         height={660}
-                        className="h-12 w-auto object-contain hover:-translate-y-2"
+                                className={`h-12 w-auto object-contain hover:-translate-y-2 ${isHovered ? "rotate-2" : ""}`}
                     />
 
-                    <div className="absolute">
+                    <div className={`${isHovered ? "rotate-2" : ""} absolute`}>
                         <IconDiv url={url} unique="Mario" />
                     </div>
                 </div>
-                <ButtonText btnFontStyle={btnFontStyle} content={(<SuperFont text={content} />)} fontClass={"MariaFont"} />
+                <ButtonText btnFontStyle={btnFontStyle} content={(<SuperFont text={content} isHovered={isHovered} />)} fontClass={"MariaFont"} />
             </Link>
             <div onClick={() => handleCopy(url)} className="absolute p-2 h-9 right-3 grid place-items-center aspect-square rounded-full border border-white group cursor-pointer bg-black text-white hover:scale-105 active:scale-90">
                 <FaCopy className="rotate-10 group-hover:rotate-0" />
@@ -441,11 +445,12 @@ export default function Button({ url, content, userId }) {
         )
     );
 }
-const colors = ['#fff', '#fff', '#fff', '#fff', '#fff'];
 
-const SuperFont = ({ text }) => {
+const SuperFont = ({ text, isHovered }) => {
+    const colors = ['#fff', '#fff', '#fff', '#fff', '#fff'];
+
     const coloredText = text.split('').map((char, index) => (
-        <span className="md:text-2xl sm:text-xl text-lg drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-transparent" key={index} style={{ color: colors[index % colors.length] }}>
+        <span className="md:text-2xl sm:text-xl text-lg drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-transparent" key={index} style={{ color: isHovered ? "#3b82f6" : colors[index % colors.length] }}>
             {char}
         </span>
     ));
