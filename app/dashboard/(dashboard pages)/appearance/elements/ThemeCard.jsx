@@ -1,7 +1,7 @@
 "use client"
 import { fireApp } from "@/important/firebase";
 import { testForActiveSession } from "@/lib/authentication/testForActiveSession";
-import { updateTheme } from "@/lib/update data/updateTheme";
+import { updateTheme, updateThemeTextColour } from "@/lib/update data/updateTheme";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -11,8 +11,12 @@ export default function ThemeCard({ type, pic, text }) {
     const [isSelectedTheme, setIsSelectedTheme] = useState(false);
     const [themeColor, setThemeColor] = useState("");
 
+    const specialThemes = ["New Mario", "Matrix"];
+
     const handleUpdateTheme = async() => {
         await updateTheme(text ? text : "Custom", themeColor);
+        if(!specialThemes.includes(text)) return;
+        await updateThemeTextColour(themeColor);
     }
 
     useEffect(() => {
@@ -29,6 +33,9 @@ export default function ThemeCard({ type, pic, text }) {
                 break;
             case 'Matrix':
                 setThemeColor("#0f0");
+                break;
+            case 'New Mario':
+                setThemeColor("#000");
                 break;
         
             default:
