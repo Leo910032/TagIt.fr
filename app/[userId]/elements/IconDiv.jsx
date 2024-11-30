@@ -4,7 +4,7 @@ import { makeValidUrl } from "@/lib/utilities";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function IconDiv({url}) {
+export default function IconDiv({ url, unique }) {
     const [iconToDisplay, setIconToDisplay] = useState("https://linktree.sirv.com/Images/brands/tiktok.svg");
 
     function getRootNameFromUrl(url) {
@@ -28,7 +28,7 @@ export default function IconDiv({url}) {
     }, [url]);
 
     return (
-        <div className="h-[2rem] w-fit rounded-lg p-[2px] bg-white aspect-square">
+        <div className={`h-[2rem] w-fit ${unique === "Mario" ? "border-2 border-black" : "rounded-lg"} p-[2px] bg-white aspect-square`}>
             <Image src={iconToDisplay} alt="link Icon" height={50} width={50} className="object-fit h-full aspect-square" />
         </div>
     );
