@@ -71,7 +71,12 @@ export default async function sitemap() {
         }));
 
         // Combine static and dynamic routes
-        return [...staticRoutes, ...userRoutes];
+        return [...staticRoutes, ...userRoutes, {
+            url: `https://mylinks.fabiconcept.online/${users.length}`,
+            lastModified: new Date(),
+            changeFrequency: 'daily',
+            priority: 0.8,
+        }];
     } catch (error) {
         console.error('Error generating sitemap:', error);
         return staticRoutes;
