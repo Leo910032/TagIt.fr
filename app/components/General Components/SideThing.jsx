@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import "../../styles/sideThing.css";
-import Card from "../../elements/Card";
+import "@styles/sideThing.css";
+import Card from "@elements/Card";
 
 export default function SideThing() {
     const [showCards, setShowCards] = useState([]);

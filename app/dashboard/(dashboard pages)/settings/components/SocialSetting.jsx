@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image";
 import SocialCard from "./mini components/SocialCard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import React from "react";
 import Position from "../elements/Position";
 import Link from "next/link";
@@ -24,30 +24,45 @@ export default function SocialSetting() {
     });
     const [socialsArray, setSocialsArray] = useState([]);
     const [hasLoaded, setHasLoaded] = useState(false);
+    const isInitialRender = useRef(true);
 
+    // First effect for fetching data
     useEffect(() => {
         function fetchLinks() {
             const currentUser = testForActiveSession();
             const collectionRef = collection(fireApp, "AccountData");
             const docRef = doc(collectionRef, `${currentUser}`);
-
-            onSnapshot(docRef, (docSnap) => {
+            
+            const unsubscribe = onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const { socials } = docSnap.data();
-                    setSocialsArray(socials ? socials : []);
+                    if (isInitialRender.current) {
+                        setSocialsArray(socials ? socials : []);
+                        isInitialRender.current = false;
+                        setHasLoaded(true);
+                    }
                 }
             });
+            
+            // Clean up the listener when component unmounts
+            return () => unsubscribe();
         }
 
         fetchLinks();
     }, []);
 
+    // Second effect for saving data
     useEffect(() => {
         if (!hasLoaded) {
-            setHasLoaded(true);
             return;
         }
-        updateSocials(socialsArray);
+        
+        // Add a small delay to avoid race conditions
+        const timeoutId = setTimeout(() => {
+            updateSocials(socialsArray);
+        }, 300);
+        
+        return () => clearTimeout(timeoutId);
     }, [socialsArray, hasLoaded]);
 
     return (
@@ -81,7 +96,6 @@ export default function SocialSetting() {
                 </div>
                 {addIconModalOpen && <AddIconModal />}
                 {settingIconModalOpen.status && <EditIconModal />}
-
             </div>
         </SocialContext.Provider>
     );

@@ -21,7 +21,7 @@ export default function MyLinkDiv() {
             const currentUser = testForActiveSession();
             const userName = await fetchUserData(currentUser);
             const { username } = userName;
-            setMyUrl(`https://mylinks.fabiconcept.online/${username}`);
+            setMyUrl(`http://tagit-fr-profile-jonfdoe.duckdns.org:46871/${username}`);
         }
 
         fetchLinks();

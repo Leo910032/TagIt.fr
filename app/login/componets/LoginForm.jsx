@@ -1,5 +1,5 @@
 "use client"
-import { useDebounce } from "@/Local Hooks/useDebounce";
+import { useDebounce } from "@/LocalHooks/useDebounce.js";
 import { fireApp } from "@/important/firebase";
 import { loginAccount } from "@/lib/authentication/login";
 import { getSessionCookie, setSessionCookie } from "@/lib/authentication/session";
@@ -127,7 +127,7 @@ export default function LoginForm() {
     return (
         <div className="flex-1 sm:p-12 px-4 py-8 flex flex-col overflow-y-auto">
             <Link href={'/'} className="sm:p-0 p-3 w-fit">
-                <Image src={"https://linktree.sirv.com/Images/full-logo.svg"} alt="logo" height={150} width={100} className="w-[7.05rem]" />
+                <Image src="/my-logo.png" alt="logo" height={150} width={150} className="w-[7.05rem]" />
             </Link>
             <section className="mx-auto py-10 w-full sm:w-5/6 md:w-3/4 lg:w-2/3 xl:w-1/2 flex-1 flex flex-col justify-center">
                 <p className="text-2xl sm:text-5xl font-extrabold text-center">Log in to your Linktree</p>
@@ -136,7 +136,7 @@ export default function LoginForm() {
                         <label className="opacity-40">mylinktree/</label>
                         <input
                             type="text"
-                            placeholder="fabiconcept"
+                            placeholder="leonardo"
                             className="outline-none border-none bg-transparent ml-1 py-3 flex-1 text-sm sm:text-base"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}

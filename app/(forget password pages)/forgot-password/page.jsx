@@ -1,6 +1,8 @@
 import { Toaster } from "react-hot-toast";
-import ForgotPasswordForm from "./componets/ForgotPasswordForm";
-import SideThing from "@/app/components/General Components/SideThing";
+import ForgotPasswordForm from "@forget-password/forgot-password/componets/ForgotPasswordForm";
+import SideThing from "@components/General Components/SideThing";
+
+
 
 export const generateMetadata = () =>{
     return {

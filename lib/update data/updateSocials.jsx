@@ -1,3 +1,4 @@
+//updateSocial.jsx
 import { fireApp } from "@/important/firebase";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { testForActiveSession } from "../authentication/testForActiveSession";
@@ -12,12 +13,18 @@ export async function updateSocials(arrayOfSocials) {
 
             if (docSnap.exists()) {
                 const previousData = docSnap.data();
-                const objectToUpdate = {...previousData, socials: arrayOfSocials};
-                await setDoc(docRef, objectToUpdate);
+                // Only update if we have data to update with
+                if (arrayOfSocials && arrayOfSocials.length > 0) {
+                    const objectToUpdate = {...previousData, socials: arrayOfSocials};
+                    await setDoc(docRef, objectToUpdate);
+                }
                 return;
             }
 
-            await addDoc(docRef, {links: arrayOfSocials});
+            // Only create if we have data
+            if (arrayOfSocials && arrayOfSocials.length > 0) {
+                await setDoc(docRef, {socials: arrayOfSocials});
+            }
         } catch (error) {
             throw new Error(error);
         }
@@ -43,7 +50,7 @@ export async function updateSocialPosition(position) {
         }
     }
 }
-
+// Fix the addDoc calls in functions like updateSupportBanner
 export async function updateSupportBanner(choice) {
     const username = testForActiveSession();
     if (username) {
@@ -59,7 +66,8 @@ export async function updateSupportBanner(choice) {
                 return;
             }
 
-            await addDoc(docRef, {supportBanner: choice});
+            // Changed from addDoc to setDoc since we already have the docRef
+            await setDoc(docRef, {supportBanner: choice});
         } catch (error) {
             throw new Error(error);
         }

@@ -2,7 +2,7 @@
 import { fireApp } from "@/important/firebase";
 import { fetchUserData } from "@/lib/fetch data/fetchUserData";
 import { hexToRgba, makeValidUrl } from "@/lib/utilities";
-import { collection, doc, onSnapshot } from "firebase/firestore";
+import { collection, doc, onSnapshot, addDoc, serverTimestamp } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -30,8 +30,9 @@ export default function Button({ url, content, userId }) {
     const router = useRouter();
 
     const [isHovered, setIsHovered] = useState(false);
+    const [linkId, setLinkId] = useState('');
 
-    const urlRef = useRef(null)
+    const urlRef = useRef(null);
 
     const [modifierStyles, setModifierStyles] = useState({
         backgroundColor: "",
@@ -39,30 +40,160 @@ export default function Button({ url, content, userId }) {
         boxShadow: "",
     });
 
+    // Function to record the click event
+ // Function to record the click event with geolocation
+// Function to record the click event with geolocation
+// Function to record the click event with geolocation
+const recordClick = async (e) => {
+    try {
+        // Get device type
+        const deviceType = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+            ? "Mobile" 
+            : "Desktop";
+        
+        // Get referrer
+        const referrer = document.referrer ? new URL(document.referrer).hostname : "Direct";
+        
+        // First get the actual userId (database ID) using the fetchUserData function
+        const actualUserId = await fetchUserData(userId);
+        
+        // Make sure we have a valid userId
+        if (!actualUserId) {
+            console.error("Could not determine user ID for analytics");
+            return;
+        }
+        
+        // Initialize default click data
+        let clickData = {
+            linkId: linkId || url, // Use linkId if available, otherwise use URL
+            userId: actualUserId, // Use the actual user ID from the database
+            userIdStr: String(actualUserId), // Add string version for reliable equality checks
+            timestamp: serverTimestamp(),
+            deviceType: deviceType,
+            countryName: "Unknown", // Default value
+            linkTitle: content,
+            referrer: referrer,
+            url: url,
+            eventType: "link_click",
+            hasContactInfo: false, // Track if contact info has been added later
+            dateCreated: serverTimestamp() // Additional timestamp for easier querying
+        };
+        
+        // Try to get geolocation data
+        try {
+            // Fetch geolocation data from a free API service
+            const geoResponse = await fetch('https://ipapi.co/json/');
+            
+            if (geoResponse.ok) {
+                const geoData = await geoResponse.json();
+                
+                // Add geolocation data to clickData if available
+                if (geoData) {
+                    clickData = {
+                        ...clickData,
+                        countryName: geoData.country_name || "Unknown",
+                        country: geoData.country || "Unknown",
+                        city: geoData.city || "Unknown",
+                        region: geoData.region || "Unknown",
+                        ip: geoData.ip || "Unknown",
+                        latitude: geoData.latitude || 0,
+                        longitude: geoData.longitude || 0
+                    };
+                }
+            }
+        } catch (geoError) {
+            console.error("Error fetching geolocation:", geoError);
+            // Continue with the default "Unknown" location if geo lookup fails
+        }
+        
+        // Add to Firebase analytics collection
+        const clicksCollection = collection(fireApp, "analytics");
+        const docRef = await addDoc(clicksCollection, clickData);
+        
+        // Store the analytics ID in localStorage for potential later use
+        // This allows us to add contact info later if the user returns to the site
+        try {
+            // Keep a small history of recent clicks
+            const recentClicks = JSON.parse(localStorage.getItem('recentClicks') || '[]');
+            recentClicks.unshift({
+                analyticsId: docRef.id,
+                linkId: clickData.linkId,
+                timestamp: new Date().toISOString(),
+                url: clickData.url
+            });
+            
+            // Keep only the last 5 clicks
+            localStorage.setItem('recentClicks', JSON.stringify(recentClicks.slice(0, 5)));
+        } catch (storageError) {
+            console.error("Error storing click in localStorage:", storageError);
+        }
+        
+        // No need to prevent default as we still want the link to open
+        return docRef.id; // Return the analytics document ID
+    } catch (error) {
+        console.error("Error recording click:", error);
+        // Still allow the link to open even if tracking fails
+        return null;
+    }
+};
     /**
      * The `handleCopy` function copies a given URL to the clipboard and displays a success toast
      * notification.
      */
     const handleCopy = (myUrl) => {
         if (myUrl) {
-            navigator.clipboard.writeText(myUrl);
-            toast.success(
-                "Link copied",
-                {
-                    style: {
-                        border: '1px solid #6fc276',
-                        padding: '16px',
-                        color: '#6fc276',
-                    },
-                    iconTheme: {
-                        primary: '#6fc276',
-                        secondary: '#FFFAEE',
-                    },
-                }
-            );
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(myUrl)
+                    .then(() => {
+                        toast.success(
+                            "Link copied",
+                            {
+                                style: {
+                                    border: '1px solid #6fc276',
+                                    padding: '16px',
+                                    color: '#6fc276',
+                                },
+                                iconTheme: {
+                                    primary: '#6fc276',
+                                    secondary: '#FFFAEE',
+                                },
+                            }
+                        );
+                    })
+                    .catch(err => {
+                        console.error('Could not copy text: ', err);
+                        toast.error("Failed to copy link");
+                    });
+            } else {
+                // Fallback for browsers that don't support clipboard API
+                fallbackCopyTextToClipboard(myUrl);
+                toast.success("Link copied");
+            }
         }
     };
-
+    
+    // Fallback copy method for older browsers
+    const fallbackCopyTextToClipboard = (text) => {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // Make the textarea out of viewport
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            document.execCommand('copy');
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+            toast.error("Failed to copy link");
+        }
+        
+        document.body.removeChild(textArea);
+    };
     /**
      * The function `getRootNameFromUrl` takes a URL as input and returns the root name (hostname) of
      * the URL.
@@ -82,6 +213,7 @@ export default function Button({ url, content, userId }) {
 
     useEffect(() => {
         async function fetchInfo() {
+            // Get the actual user ID from the database
             const currentUser = await fetchUserData(userId);
 
             if (!currentUser) {
@@ -96,7 +228,7 @@ export default function Button({ url, content, userId }) {
                 if (!docSnapshot.exists()) {
                     return;
                 }
-                const { btnType, btnShadowColor, btnFontColor, themeFontColor, btnColor, selectedTheme, fontType } = docSnapshot.data();
+                const { btnType, btnShadowColor, btnFontColor, themeFontColor, btnColor, selectedTheme, fontType, links } = docSnapshot.data();
                 const fontName = availableFonts_Classic[fontType ? fontType - 1 : 0];
                 setSelectedFontClass(fontName.class);
                 setThemeTextColour(themeFontColor ? themeFontColor : "");
@@ -105,11 +237,19 @@ export default function Button({ url, content, userId }) {
                 setBtnFontColor(btnFontColor ? btnFontColor : "#000");
                 setBtnShadowColor(btnShadowColor ? btnShadowColor : "#000");
                 setBtnType(btnType);
+
+                // Find the corresponding link ID for this url and content
+                if (links && Array.isArray(links)) {
+                    const link = links.find(l => l.url === url && l.title === content);
+                    if (link) {
+                        setLinkId(link.id);
+                    }
+                }
             });
         }
 
         fetchInfo();
-    }, [router, userId]);
+    }, [router, userId, url, content]);
 
     useEffect(() => {
         if (selectedTheme === "3D Blocks") {
@@ -392,6 +532,7 @@ export default function Button({ url, content, userId }) {
                 className={`cursor-pointer flex gap-3 items-center min-h-10 py-3 px-3 flex-1`}
                 href={makeValidUrl(url)}
                 target="_blank"
+                onClick={recordClick}
             >
                 {specialElements}
                 <IconDiv url={url} />
@@ -422,6 +563,7 @@ export default function Button({ url, content, userId }) {
                 href={makeValidUrl(url)}
                 target="_blank"
                 ref={urlRef}
+                onClick={recordClick}
             >
                 <div className="grid place-items-center">
                     <Image

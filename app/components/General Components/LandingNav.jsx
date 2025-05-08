@@ -5,7 +5,7 @@ export default function LandingNav() {
     return (
         <div className="w-[96%] justify-between flex items-center rounded-[3rem] py-3 absolute sm:top-4 top-2 z-[9999999999] mdpx-12 sm:px-6 px-3 mx-auto bg-white bg-opacity-[0.1] border backdrop-blur-xl hover:glow-white">
             <Link href={"/"}>
-                <Image src={"https://linktree.sirv.com/Images/logo-icon.svg"} alt="logo" height={25} width={25} className="filter invert" priority />
+                <Image src="/my-logo.png" alt="logo" height={125} width={125}  priority className="bg-white  rounded-[3rem] " />
             </Link>
 
 

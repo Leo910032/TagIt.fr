@@ -1,6 +1,6 @@
 "use client"
 
-import { useDebounce } from "@/Local Hooks/useDebounce";
+import { useDebounce } from "@/LocalHooks/useDebounce.js";
 import { fireApp } from "@/important/firebase";
 import { testForActiveSession } from "@/lib/authentication/testForActiveSession";
 import updateBio from "@/lib/update data/updateBio";

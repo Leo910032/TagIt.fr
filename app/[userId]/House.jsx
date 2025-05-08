@@ -44,6 +44,7 @@ export default function House({ userId }) {
                     {/* <div className="absolute z-10 top-3 right-0 mt-7 mb-4 mr-4 bg-white hover:bg-opacity-80 active:scale-90 duration-100 cursor-pointer border rounded-full ml-auto h-[2.5rem] w-[2.5rem] grid place-items-center">
                         <FaEllipsis className="scale-80" />
                     </div> */}
+                    
 
                     <div className="flex flex-col items-center flex-1 overflow-auto py-6">
                         <ProfilePic userId={userId} />
