@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useContext, useEffect, useState } from "react";
-import { NavContext } from "../General Components/NavBar";
+import { NavContext } from "../../components/general/NavBar.jsx";
 import Image from "next/image";
 import ShareLiElement from "./elements/ShareLiElement";
-import { ShareTo, addSocials, homePage, socialPage } from "@/lib/ShareCardArrays";
+import { ShareTo, addSocials, homePage, socialPage } from "@lib/ShareCardArrays";
 import MLink from "./elements/MLink";
 import MyQrCode from "./elements/MyQrCode";
 

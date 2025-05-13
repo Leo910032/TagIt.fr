@@ -1,5 +1,5 @@
 import Image from "next/image";
-import "@/app/styles/MarioCloud.css"
+import "@/styles/MarioCloud.css"
 
 export default function Mario() {
     return (

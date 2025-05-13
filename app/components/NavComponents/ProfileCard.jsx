@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import Image from "next/image";
 import LiElement from "./elements/LiElement";
 import Profile from "./elements/Profile";
-import { NavContext } from "../General Components/NavBar";
+import { NavContext } from "../../components/general/NavBar.jsx";
 
 export default function ProfileCard() {
     const {

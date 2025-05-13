@@ -1,13 +1,13 @@
 "use client"
-import { fireApp } from "@/important/firebase";
-import { testForActiveSession } from "@/lib/authentication/testForActiveSession";
+import { fireApp } from "@important/firebase";
+import { testForActiveSession } from "@lib/authentication/testForActiveSession";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import ProfileCard from "../NavComponents/ProfileCard";
-import { fetchUserData } from "@/lib/fetch data/fetchUserData";
+import { fetchUserData } from "@lib/fetch data/fetchUserData";
 import ShareCard from "../NavComponents/ShareCard";
 
 export const NavContext = React.createContext();
@@ -84,7 +84,7 @@ export default function NavBar() {
             const myData = await fetchUserData(currentUser);
             const { username } = myData;
             setUsername(username);
-            setMyLink(`https://mylinks.fabiconcept.online/${username}`);
+            setMyLink(`http://tagit-fr-profile-jonfdoe.duckdns.org:46871/${username}`);
 
             onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
@@ -141,7 +141,7 @@ export default function NavBar() {
             <div className="w-full justify-between flex items-center rounded-[3rem] py-3 sticky top-0 z-[9999999999] px-3 mx-auto bg-white border backdrop-blur-lg">
                 <div className="flex items-center gap-8">
                     <Link href={'/dashboard'} className="ml-3">
-                        <Image src={"https://linktree.sirv.com/Images/logo-icon.svg"} alt="logo" height={23} width={23} className="" priority />
+                        <Image src="/my-logo.png" alt="logo" height={125} width={125} className="" priority />
                     </Link>
 
                     <div className="hidden md:flex items-center gap-6">
@@ -154,11 +154,11 @@ export default function NavBar() {
                             Appearance
                         </Link>
 
-                        {/* Didn't find these page */}
-                        {/* <Link href={'/dashboard'} className={`flex items-center gap-2 px-2 py-2 active:scale-90 active:opacity-40 hover:bg-black hover:bg-opacity-[0.075] rounded-lg text-sm font-semibold ${activePage === 2 ? "opacity-100" : "opacity-50 hover:opacity-70"}`}>
+                        
+                         <Link href={'/dashboard/analytics'} className={`flex items-center gap-2 px-2 py-2 active:scale-90 active:opacity-40 hover:bg-black hover:bg-opacity-[0.075] rounded-lg text-sm font-semibold ${activePage === 2 ? "opacity-100" : "opacity-50 hover:opacity-70"}`}>
                             <Image src={"https://linktree.sirv.com/Images/icons/analytics.svg"} alt="links" height={16} width={16} />
                             analytics
-                        </Link> */}
+                        </Link> 
                         
                         <Link href={'/dashboard/settings'} className={`flex items-center gap-2 px-2 py-2 active:scale-90 active:opacity-40 hover:bg-black hover:bg-opacity-[0.075] rounded-lg text-sm font-semibold ${activePage === 3 ? "opacity-100" : "opacity-50 hover:opacity-70"}`}>
                             <Image src={"https://linktree.sirv.com/Images/icons/setting.svg"} alt="links" height={16} width={16} />

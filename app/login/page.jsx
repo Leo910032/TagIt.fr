@@ -1,6 +1,6 @@
 import { Toaster } from "react-hot-toast"
 import LoginForm from "./componets/LoginForm"
-import SideThing from "@/app/components/General Components/SideThing";
+import SideThing from "./componets/SideThing.jsx";
 
 export const generateMetadata = () =>{
     return {

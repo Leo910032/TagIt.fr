@@ -1,8 +1,8 @@
 "use client"
-import { useDebounce } from "@/Local Hooks/useDebounce";
-import { fireApp } from "@/important/firebase";
-import { sendResetUrl } from "@/lib/authentication/sendResetUrl";
-import { generateRandomId, validateEmail } from "@/lib/utilities";
+import { useDebounce } from "@LocalHooks/useDebounce.js";
+import { fireApp } from "@important/firebase";
+import { sendResetUrl } from "@lib/authentication/sendResetUrl";
+import { generateRandomId, validateEmail } from "@lib/utilities";
 import { collection, onSnapshot } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";

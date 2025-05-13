@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google'
-import NavBar from '../components/General Components/NavBar'
+import NavBar from '../components/general/NavBar.jsx'
 import CheckSession from './general components/CheckSession'
 import { Toaster } from 'react-hot-toast'
 import Preview from './general components/Preview'

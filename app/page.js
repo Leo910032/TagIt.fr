@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Form from "./elements/LandingPage Elements/Form";
 import Topings from "./elements/LandingPage Elements/Topings";
-import LandingNav from "./components/General Components/LandingNav";
+import LandingNav from "./components/general/LandingNav.jsx";
 
 export default async function Home() {
     return (

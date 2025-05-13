@@ -1,7 +1,7 @@
 "use client"
-import { validatePassword } from "@/lib/utilities";
-import { useDebounce } from "@/Local Hooks/useDebounce";
-import { changePassword } from "@/lib/authentication/changePassword";
+import { validatePassword } from "@lib/utilities";
+import { useDebounce } from "@LocalHooks/useDebounce.js";
+import { changePassword } from "@lib/authentication/changePassword";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

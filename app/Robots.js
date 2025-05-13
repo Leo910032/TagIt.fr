@@ -4,6 +4,6 @@ export default function robots() {
             userAgent: '*',
             allow: '/',
         },
-        sitemap: 'https://mylinks.fabiconcept.online/sitemap.xml',
+        sitemap: 'http://tagit-fr-profile-jonfdoe.duckdns.org:46871/sitemap.xml',
     }
 }

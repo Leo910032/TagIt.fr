@@ -1,5 +1,5 @@
 import SignUpForm from "./componets/SignupForm"
-import SideThing from "@/app/components/General Components/SideThing";
+import SideThing from "@components/general/SideThing";
 import { Toaster } from "react-hot-toast"
 
 export const generateMetadata = () => {

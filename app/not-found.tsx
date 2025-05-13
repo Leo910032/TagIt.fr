@@ -1,5 +1,5 @@
 import Image from "next/image";
-import SideThing from "./components/General Components/SideThing";
+import SideThing from "@components/general/SideThing";
 import Link from "next/link";
 
 export default function NotFound() {

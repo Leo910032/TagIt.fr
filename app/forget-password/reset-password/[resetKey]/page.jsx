@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { verifyResetKey } from "@/lib/authentication/verifyResetKey";
+import { verifyResetKey } from "@lib/authentication/verifyResetKey";
 import ResetPasswordForm from "./components/ResetPassword";
 import { Toaster } from "react-hot-toast";
 

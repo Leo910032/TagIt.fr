@@ -1,4 +1,4 @@
-import { fireApp } from "@/important/firebase";
+import { fireApp } from "@important/firebase";
 import { generateId, realEscapeString} from "../utilities";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { generateSalt, hashPassword } from "./encryption";

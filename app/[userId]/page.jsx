@@ -1,5 +1,5 @@
-import { fetchUserData } from "@/lib/fetch data/fetchUserData";
-import { fireApp } from "@/important/firebase";
+import { fetchUserData } from "@lib/fetch data/fetchUserData";
+import { fireApp } from "@important/firebase";
 import { collection, doc, getDoc } from "firebase/firestore";
 import House from "./House";
 import Filter from "bad-words"

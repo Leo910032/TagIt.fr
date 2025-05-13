@@ -2,8 +2,8 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import "../../styles/3d.css";
-import { getSessionCookie } from '@/lib/authentication/session';
-import { fetchUserData } from '@/lib/fetch data/fetchUserData';
+import { getSessionCookie } from '@lib/authentication/session';
+import { fetchUserData } from '@lib/fetch data/fetchUserData';
 
 export default function Preview() {
     const [username, setUsername] = useState("");
@@ -98,16 +98,16 @@ export default function Preview() {
     }, []);
 
     return (
-        <div className="w-[35rem] md:grid hidden place-items-center border-l ml-4" >
+        <div className="w-[25rem] md:grid hidden place-items-center border-l ml-4" >
             <div className='w-fit h-fit' id='container'>
                 <div className="h-[45rem] scale-[0.8] w-[23rem] bg-black rounded-[3rem] grid place-items-center" id="inner">
                     <div className="h-[97.5%] w-[95%] bg-white bg-opacity-[.1] grid place-items-center rounded-[2.5rem] overflow-hidden relative border">
-                        <div className='absolute h-[20px] w-[20px] rounded-full top-2 bg-black'></div>
+                        <div className='absolute h-[20px] w-[20px] rounded-full top-1 bg-black'></div>
                         <div className='top-6 left-6 absolute pointer-events-none'>
                             <Image src={"https://linktree.sirv.com/Images/gif/loading.gif"} width={25} height={25} alt="loading" className=" mix-blend-screen" />
                         </div>
                         <div className="h-full w-full">
-                            <iframe src={`https://mylinks.fabiconcept.online/${username}`} frameBorder="0" className='h-full bg-white w-full'></iframe>
+                            <iframe src={`http://tagit-fr-profile-jonfdoe.duckdns.org:46871//${username}`} frameBorder="0" className='h-full bg-white w-full'></iframe>
                         </div>
                     </div>
                 </div>

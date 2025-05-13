@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { fireApp } from "@/important/firebase";
+import { fireApp } from "@important/firebase";
 
 // Static routes that don't depend on user data
 const staticRoutes= [
@@ -64,7 +64,7 @@ export default async function sitemap() {
 
         // Generate dynamic routes for users
         const userRoutes = users.map((user) => ({
-            url: `https://mylinks.fabiconcept.online/${user.username}`,
+            url: `http://http://tagit-fr-profile-jonfdoe.duckdns.org//${user.username}`,
             lastModified: new Date(user.lastModified || new Date()),
             changeFrequency: 'daily',
             priority: 0.8,
@@ -72,7 +72,7 @@ export default async function sitemap() {
 
         // Combine static and dynamic routes
         return [...staticRoutes, ...userRoutes, {
-            url: `https://mylinks.fabiconcept.online/${users.length}`,
+            url: `http://http://tagit-fr-profile-jonfdoe.duckdns.org//${users.length}`,
             lastModified: new Date(),
             changeFrequency: 'daily',
             priority: 0.8,

@@ -1,6 +1,6 @@
 "use client"
-import { testForActiveSession } from "@/lib/authentication/testForActiveSession";
-import { fetchUserData } from "@/lib/fetch data/fetchUserData";
+import { testForActiveSession } from "@lib/authentication/testForActiveSession";
+import { fetchUserData } from "@lib/fetch data/fetchUserData";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -21,7 +21,7 @@ export default function MyLinkDiv() {
             const currentUser = testForActiveSession();
             const userName = await fetchUserData(currentUser);
             const { username } = userName;
-            setMyUrl(`https://mylinks.fabiconcept.online/${username}`);
+            setMyUrl(`http://tagit-fr-profile-jonfdoe.duckdns.org:46871/${username}`);
         }
 
         fetchLinks();

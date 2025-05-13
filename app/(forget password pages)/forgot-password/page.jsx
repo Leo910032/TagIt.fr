@@ -1,6 +1,6 @@
 import { Toaster } from "react-hot-toast";
-import ForgotPasswordForm from "./componets/ForgotPasswordForm";
-import SideThing from "@/app/components/General Components/SideThing";
+import ForgotPasswordForm from "@forget-password/componets/ForgotPasswordForm.jsx";
+import SideThing from "@components/general/SideThing";
 
 export const generateMetadata = () =>{
     return {
@@ -10,7 +10,6 @@ export const generateMetadata = () =>{
 }
 
 export default function ForgotPasswordPage() {
-
     return (
         <div className="flex h-screen w-screen">
             <Toaster />
