@@ -1,14 +1,53 @@
 "use client";
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
     APIProvider,
     Map,
-    HeatmapLayer,
-    Marker
+    Marker,
+    useMapsLibrary
   } from '@vis.gl/react-google-maps';
 // Fix the import path to correctly reference the Mapmarker component
 import CustomMapMarker from '../Mapmarker.jsx'; // One level up from /analytics
+
+// Create a custom HeatmapLayer component since it's not directly exported
+const HeatmapLayer = ({ points, options }) => {
+  const [heatmap, setHeatmap] = useState(null);
+  const visualizationLibrary = useMapsLibrary('visualization');
+  const map = useMap();
+
+  useEffect(() => {
+    if (!visualizationLibrary || !map || !points.length) return;
+
+    // Create heatmap if it doesn't exist
+    if (!heatmap) {
+      const heatmapData = new visualizationLibrary.HeatmapLayer({
+        data: points.map(point => new google.maps.LatLng(point.lat, point.lng, point.weight)),
+        map: map,
+        ...options
+      });
+      setHeatmap(heatmapData);
+    } else {
+      // Update existing heatmap
+      heatmap.setData(points.map(point => new google.maps.LatLng(point.lat, point.lng, point.weight)));
+      heatmap.setOptions(options);
+    }
+
+    return () => {
+      if (heatmap) {
+        heatmap.setMap(null);
+      }
+    };
+  }, [visualizationLibrary, map, points, options, heatmap]);
+
+  return null;
+};
+
+// Get map context
+const useMap = () => {
+  const map = useMapsLibrary('maps')?.getMap();
+  return map;
+};
 
 export default function MapView({
   googleMapsApiKey,
@@ -169,7 +208,7 @@ export default function MapView({
       </div>
      
       <div className="h-[600px] relative rounded-lg overflow-hidden">
-        <APIProvider apiKey={googleMapsApiKey}>
+        <APIProvider apiKey={googleMapsApiKey} libraries={["visualization"]}>
           <Map
             mapId="visitorLocationsMap"
             style={{ height: '100%', width: '100%' }}
@@ -179,15 +218,9 @@ export default function MapView({
             disableDefaultUI={false}
           >
             {/* Heatmap Layer */}
-            {showHeatmap && (
+            {showHeatmap && heatmapData.length > 0 && (
               <HeatmapLayer 
-                points={geoLocations
-                  .filter(loc => loc.userId === currentUser.uid)
-                  .map(loc => ({
-                    lat: loc.lat,
-                    lng: loc.lng,
-                    weight: 1
-                  }))}
+                points={heatmapData}
                 options={{
                   radius: 20,
                   opacity: 0.6,
@@ -268,7 +301,7 @@ export default function MapView({
         <ol className="list-decimal list-inside space-y-1 text-gray-700">
           <li>Click on any marker on the map to see visitor details</li>
           <li>Click Add Contact Info to open the contact form</li>
-          <li>Fill in the contact details and click Save Contac</li>
+          <li>Fill in the contact details and click Save Contact</li>
           <li>View all collected contacts in the Contacts tab</li>
         </ol>
       </div>

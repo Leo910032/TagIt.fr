@@ -8,7 +8,7 @@ import { getProducts } from './firebase-utils';
 import { toast } from 'react-hot-toast';
 import { getCookieValue } from '@utils/auth-utils';
 
-export default function ProductGrid() {
+export default function ProductGrid({ onProductSelect }) {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -37,8 +37,13 @@ export default function ProductGrid() {
   }, []);
 
   const handleSelectProduct = (product) => {
-    // Navigate to product detail/customization page
-    router.push(`/store/customize/${product.id}`);
+    // If we have an onProductSelect callback, use it (for custom flow)
+    if (typeof onProductSelect === 'function') {
+      onProductSelect(product);
+    } else {
+      // Otherwise use the default behavior (direct URL navigation)
+      router.push(`/store/customize/${product.id}`);
+    }
   };
 
   if (isLoading) {

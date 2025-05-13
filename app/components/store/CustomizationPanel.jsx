@@ -138,6 +138,7 @@ export default function CustomizationPanel({ productType, onCustomizationChange 
       toast.error('File size must be less than 5MB');
       return;
     }
+   
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -770,6 +771,7 @@ export default function CustomizationPanel({ productType, onCustomizationChange 
             )}
           </div>
           
+          
           {/* Additional Text */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -794,8 +796,8 @@ export default function CustomizationPanel({ productType, onCustomizationChange 
             <div className="flex items-start text-xs text-gray-500 max-w-xs">
               <FiInfo className="mr-1 mt-0.5 flex-shrink-0" />
               <p>
-                Click "Preview Card" to see how your card will look. You can save your design after 
-                previewing.
+              Click &quot;Preview Card&quot; to see how your card will look. You can save your design after 
+              previewing.
               </p>
             </div>
             <button

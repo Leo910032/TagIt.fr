@@ -1,13 +1,7 @@
 // app/store/customize/[id]/page.jsx
+'use client';
+import ProductDetail from '@components/store/ProductDetail';
 
-import StorePage from '../../../components/store/StorePage';
-
-export default function CustomizeProductPage({ params }) {
-  return <StorePage />;
+export default function CustomizePage({ params }) {
+  return <ProductDetail productId={params.id} />;
 }
-
-// Optional: Add metadata for SEO
-export const metadata = {
-  title: 'Customize Your Card - TagIt Store',
-  description: 'Design your NFC business card with our customization tools',
-};

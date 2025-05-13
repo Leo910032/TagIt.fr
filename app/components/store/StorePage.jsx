@@ -7,9 +7,15 @@ import { useRouter, usePathname } from 'next/navigation';
 import { FiShoppingCart, FiCheck, FiCreditCard, FiSmartphone, FiGlobe, FiTrendingUp, FiArrowRight, FiStar, FiUser, FiLogIn } from 'react-icons/fi';
 import ProductGrid from './ProductGrid';
 import ProductDetail from './ProductDetail';
+import CardSelector from './CardSelector';
+import CardInfoForm from './CardInfoForm';
+import CardPreview from './CardPreview';
+import TemplateSelector from './TemplateSelector';
+import ColorCustomizer from './ColorCustomizer';
+import UploadDesign from './UploadDesign';
 import { testForActiveSession } from "@lib/authentication/testForActiveSession";
 
-// Constants for the page content
+// Constants for page content
 const FEATURES = [
   {
     icon: <FiSmartphone className="w-6 h-6" />,
@@ -58,6 +64,10 @@ export default function StorePage() {
   const router = useRouter();
   const pathname = usePathname();
   
+  // Track current step in the store flow
+  const [currentStep, setCurrentStep] = useState('home');
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  
   // Check if we're on a product detail page
   const isProductPage = pathname.includes('/store/product/') || pathname.includes('/store/customize/');
   
@@ -67,6 +77,34 @@ export default function StorePage() {
     const segments = pathname.split('/');
     productId = segments[segments.length - 1];
   }
+
+  // Customization state
+  const [colors, setColors] = useState({
+    background: '#ffffff',
+    text: '#000000',
+    accent: '#3b82f6'
+  });
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [colorPickerTarget, setColorPickerTarget] = useState('');
+  const [uploadedLogo, setUploadedLogo] = useState(null);
+  const [uploadedDesign, setUploadedDesign] = useState(null);
+  const [cardInfo, setCardInfo] = useState({
+    name: '',
+    title: '',
+    company: '',
+    email: '',
+    phone: '',
+    website: ''
+  });
+  const [selectedTemplate, setSelectedTemplate] = useState({
+    id: 'minimal-light',
+    name: 'Minimal Light',
+    colors: {
+      background: '#ffffff',
+      text: '#000000',
+      accent: '#3b82f6'
+    }
+  });
 
   // Authentication state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -83,7 +121,6 @@ export default function StorePage() {
           setIsLoggedIn(true);
           // Fetch username for personalized experience
           try {
-            // This is a fetch, not a redirect
             const response = await fetch(`/api/user/${userId}`);
             if (response.ok) {
               const userData = await response.json();
@@ -121,11 +158,90 @@ export default function StorePage() {
     
     checkAuth();
   }, []);
+  // In StorePage.jsx
+
+
+  // Check URL params on load to restore state
+  useEffect(() => {
+    if (isProductPage && productId) {
+      setCurrentStep('customize');
+    }
+  }, [isProductPage, productId]);
 
   // Handle login request
   const handleLoginRequest = () => {
     router.push("/login?redirect=/store");
   };
+
+  // Color customization handlers
+  const handleOpenColorPicker = (target) => {
+    setColorPickerTarget(target);
+    setShowColorPicker(true);
+  };
+
+  const handleColorChange = (color) => {
+    setColors({
+      ...colors,
+      [colorPickerTarget]: color
+    });
+  };
+
+  const handleCloseColorPicker = () => {
+    setShowColorPicker(false);
+  };
+
+  // Design upload handler
+  const handleUpload = (type, imageData) => {
+    if (type === 'logo') {
+      setUploadedLogo(imageData);
+    } else if (type === 'design') {
+      setUploadedDesign(imageData);
+    }
+  };
+
+  // Template selector handler
+  const handleSelectTemplate = (template) => {
+    setSelectedTemplate(template);
+    setColors(template.colors);
+  };
+
+  // Card selection handler
+  const handleSelectCard = (card) => {
+    setSelectedProduct(card);
+    setCurrentStep('customize');
+    
+    // Update URL without full navigation for better UX
+    if (typeof window !== 'undefined') {
+      window.history.pushState({}, '', `/store/customize/${card.id}`);
+    }
+  };
+
+  // Go back to previous step
+ // In StorePage.jsx
+const handleBack = () => {
+  setCurrentStep('home');
+  setSelectedProduct(null);
+  
+  // Reset all customization state
+  setColors({
+    background: '#ffffff',
+    text: '#000000',
+    accent: '#3b82f6'
+  });
+  setUploadedLogo(null);
+  setUploadedDesign(null);
+  setCardInfo({
+    name: '',
+    title: '',
+    company: '',
+    email: '',
+    phone: '',
+    website: ''
+  });
+  
+  // Update URL
+  router.replace('/store');
+};
 
   // When showing loading state
   if (isCheckingAuth) {
@@ -136,53 +252,17 @@ export default function StorePage() {
     );
   }
 
-  // Render UI based on whether we're on product page or homepage
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white border-b sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="text-xl font-bold text-gray-900 flex items-center">
-              <span className="text-blue-600 mr-2">TagIt</span>
-              NFC Cards
-            </Link>
-            <div className="flex items-center gap-4">
-              {isLoggedIn ? (
-                <>
-                  <Link href="/dashboard" className="text-gray-600 hover:text-gray-900">
-                    Dashboard
-                  </Link>
-                  <Link href="/dashboard/analytics" className="text-gray-600 hover:text-gray-900">
-                    Analytics
-                  </Link>
-                </>
-              ) : (
-                <button 
-                  onClick={handleLoginRequest}
-                  className="text-gray-600 hover:text-gray-900"
-                >
-                  Sign In
-                </button>
-              )}
-              <Link href="/store/cart" className="relative">
-                <FiShoppingCart className="w-5 h-5 text-gray-600" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+  // Render store content based on current step
+  const renderStoreContent = () => {
+    // If we're on a product detail page from direct URL access
+    if (isProductPage && productId) {
+      return <ProductDetail productId={productId} />;
+    }
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {isProductPage && productId ? (
-          <ProductDetail productId={productId} />
-        ) : (
+    // When using the frontend flow
+    switch (currentStep) {
+      case 'home':
+        return (
           <div className="space-y-20">
             {/* Hero Section */}
             <section className="text-center max-w-4xl mx-auto">
@@ -243,7 +323,7 @@ export default function StorePage() {
                 </p>
               </div>
               
-              <ProductGrid />
+              <ProductGrid onProductSelect={handleSelectCard} />
             </section>
 
             {/* How It Works */}
@@ -285,7 +365,7 @@ export default function StorePage() {
                         <FiStar key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
-                    <p className="text-gray-600 mb-4 italic">"{testimonial.text}"</p>
+                    <p className="text-gray-600 mb-4 italic">&ldquo;{testimonial.text}&rdquo;</p>
                     <div>
                       <p className="font-medium text-gray-900">{testimonial.name}</p>
                       <p className="text-sm text-gray-500">{testimonial.company}</p>
@@ -299,7 +379,7 @@ export default function StorePage() {
             <section className="text-center bg-blue-600 text-white -mx-4 sm:-mx-6 lg:-mx-8 px-6 py-16 rounded-lg">
               <h2 className="text-3xl font-bold mb-4">Ready to Go Digital?</h2>
               <p className="text-xl mb-8 opacity-90">
-                Join thousands of professionals who've made the switch to smart business cards
+              Join thousands of professionals who&apos;ve made the switch to smart business cards
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <a
@@ -319,7 +399,139 @@ export default function StorePage() {
               </div>
             </section>
           </div>
-        )}
+        );
+        
+      case 'customize':
+        return (
+          <div className="max-w-6xl mx-auto">
+            <button 
+              onClick={handleBack}
+              className="flex items-center text-gray-600 hover:text-gray-900 mb-8"
+            >
+              <FiArrowRight className="rotate-180 mr-2" />
+              Back to Products
+            </button>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              {/* Left Column: Customization Options */}
+              <div className="md:col-span-2 space-y-8">
+                <h1 className="text-3xl font-bold text-gray-900">Customize Your Card</h1>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="bg-white p-6 rounded-lg border shadow-sm">
+                    <ColorCustomizer 
+                      colors={colors}
+                      showColorPicker={showColorPicker}
+                      colorPickerTarget={colorPickerTarget}
+                      onOpenColorPicker={handleOpenColorPicker}
+                      onColorChange={handleColorChange}
+                      onCloseColorPicker={handleCloseColorPicker}
+                    />
+                  </div>
+                  
+                  <div className="bg-white p-6 rounded-lg border shadow-sm">
+                    <TemplateSelector 
+                      selectedTemplate={selectedTemplate} 
+                      onSelectTemplate={handleSelectTemplate} 
+                    />
+                  </div>
+                </div>
+                
+                <div className="bg-white p-6 rounded-lg border shadow-sm">
+                  <UploadDesign 
+                    uploadedLogo={uploadedLogo} 
+                    uploadedDesign={uploadedDesign} 
+                    onUpload={handleUpload} 
+                  />
+                </div>
+                
+                <div className="bg-white p-6 rounded-lg border shadow-sm">
+                  <CardInfoForm 
+                    cardInfo={cardInfo} 
+                    onUpdateInfo={setCardInfo} 
+                  />
+                </div>
+                
+                <div className="bg-white p-6 rounded-lg border shadow-sm">
+                  <button
+                    onClick={() => {
+                      // In a real app, this would save the customization and add to cart
+                      router.push('/store/cart');
+                    }}
+                    className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center justify-center gap-2"
+                  >
+                    <FiShoppingCart className="w-5 h-5" />
+                    Add to Cart
+                  </button>
+                  
+                  <p className="text-sm text-gray-500 text-center mt-3">
+                    Your customization will be saved automatically
+                  </p>
+                </div>
+              </div>
+              
+              {/* Right Column: Preview */}
+              <div className="md:col-span-1">
+                <CardPreview 
+                  colors={colors} 
+                  uploadedDesign={uploadedDesign} 
+                  uploadedLogo={uploadedLogo} 
+                  cardInfo={cardInfo} 
+                />
+              </div>
+            </div>
+          </div>
+        );
+        
+      default:
+        return <div>Unknown step</div>;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation */}
+      <nav className="bg-white border-b sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
+            <Link href="/" className="text-xl font-bold text-gray-900 flex items-center">
+              <span className="text-blue-600 mr-2">TagIt</span>
+              NFC Cards
+            </Link>
+            <div className="flex items-center gap-4">
+              {isLoggedIn ? (
+                <>
+                  <Link href="/dashboard" className="text-gray-600 hover:text-gray-900">
+                    Dashboard
+                  </Link>
+                  <Link href="/dashboard/analytics" className="text-gray-600 hover:text-gray-900">
+                    Analytics
+                  </Link>
+                </>
+              ) : (
+                <button 
+                  onClick={handleLoginRequest}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Sign In
+                </button>
+              )}
+              <Link href="/store/cart" className="relative">
+                <FiShoppingCart className="w-5 h-5 text-gray-600" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {renderStoreContent()}
       </main>
       
       {/* Footer */}

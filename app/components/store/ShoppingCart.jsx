@@ -1,8 +1,3 @@
-// Updated version of ShoppingCart.jsx that checks auth status
-// but doesn't force redirects
-
-'use client';
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -114,7 +109,7 @@ export default function ShoppingCart() {
       <div className="max-w-2xl mx-auto p-8 bg-white rounded-lg shadow-md text-center my-12">
         <FiShoppingCart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
         <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
-        <p className="mb-6 text-gray-600">You haven't added any items to your cart yet.</p>
+        <p className="mb-6 text-gray-600">You haven&apos;t added any items to your cart yet.</p>
         <button 
           onClick={() => router.push('/store')}
           className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"

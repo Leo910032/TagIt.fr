@@ -1,7 +1,6 @@
 // This file should go in app/store/layout.jsx to apply specific
 // layout settings to the store section without redirecting
 
-'use client';
 
 import { Suspense } from 'react';
 import NavBar from '../../components/general/NavBar.jsx';

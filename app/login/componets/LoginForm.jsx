@@ -1,5 +1,6 @@
 'use client';
 
+// app/login/LoginForm.js
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -236,8 +237,8 @@ export default function LoginForm() {
                     {!isLoading && <span className="text-sm text-red-500 text-center">{errorMessage}</span>}
                 </form>
                 <p className="text-center sm:text-base text-sm">
-                    <span className="opacity-60">Don't have an account?</span> 
-                    <Link 
+                <span className="opacity-60">Don&apos;t have an account?</span> 
+                <Link 
                         href={redirect && !loopDetected ? `/signup?redirect=${encodeURIComponent(redirect)}${step ? `&step=${step}` : ''}` : "/signup"} 
                         className="text-themeGreen ml-2"
                     >

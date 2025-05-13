@@ -1,8 +1,7 @@
 'use client';
 // app/admin/initDb.jsx
-// This is a simple component you can use to initialize your database with test products
 import { useState } from 'react';
-import { collection, addDoc, getDocs, query, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, setDoc, getDocs, query, serverTimestamp } from 'firebase/firestore';
 import { fireApp } from '@important/firebase';
 import { FiLoader, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 
@@ -13,12 +12,9 @@ export default function InitializeDatabase() {
   const [existingProducts, setExistingProducts] = useState([]);
   const [hasChecked, setHasChecked] = useState(false);
 
-  // Test data for products
-  // Test data for the 'products' collection in Firebase Firestore
-
-const productsData = [
+  const productsData = [
     {
-      id: "pvc-standard-001", // You can let Firestore auto-generate IDs instead
+      id: "pvc-standard-001",
       name: "Premium PVC Card",
       description: "Our high-quality recycled PVC card with NFC technology for seamless digital profile sharing.",
       price: 45,
@@ -32,9 +28,7 @@ const productsData = [
         "Full color printing on both sides",
         "Waterproof and scratch-resistant"
       ],
-      inStock: true,
-      createdAt: new Date(), // This will be converted to a Firestore timestamp
-      updatedAt: new Date()
+      inStock: true
     },
     {
       id: "wood-eco-001",
@@ -52,9 +46,7 @@ const productsData = [
         "Water-resistant finish",
         "Biodegradable materials"
       ],
-      inStock: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      inStock: true
     },
     {
       id: "metal-premium-001",
@@ -72,9 +64,7 @@ const productsData = [
         "Waterproof and extremely durable",
         "Premium matte finish"
       ],
-      inStock: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      inStock: true
     },
     {
       id: "pvc-gold-001",
@@ -92,9 +82,7 @@ const productsData = [
         "Full color printing on both sides",
         "Waterproof and scratch-resistant"
       ],
-      inStock: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      inStock: true
     },
     {
       id: "wood-walnut-001",
@@ -112,9 +100,7 @@ const productsData = [
         "Laser engraving on both sides",
         "Water-resistant finish"
       ],
-      inStock: false, // Set one product as out of stock for testing
-      createdAt: new Date(),
-      updatedAt: new Date()
+      inStock: false
     }
   ];
 
@@ -154,20 +140,22 @@ const productsData = [
       const addedProducts = [];
       
       for (const product of productsData) {
-        const docRef = await addDoc(productsRef, {
-          ...product,
+        // Create a new object without the id property
+        const productData = { ...product };
+        delete productData.id; // Remove id from the data
+        
+        // Use setDoc with the custom ID
+        await setDoc(doc(productsRef, product.id), {
+          ...productData, // Use the cleaned data
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp()
         });
         
-        addedProducts.push({
-          id: docRef.id,
-          ...product
-        });
+        addedProducts.push(product);
       }
       
       setResult({
-        message: `Successfully added ${addedProducts.length} products to the database`,
+        message: `Successfully added ${addedProducts.length} products to the database with custom IDs`,
         products: addedProducts
       });
       
@@ -239,7 +227,7 @@ const productsData = [
           
           <button 
             onClick={initializeProducts} 
-            disabled={isLoading}
+            disabled={isLoading || existingProducts.length >= productsData.length}
             className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-green-300"
           >
             {isLoading ? (

@@ -21,6 +21,12 @@ export default function ProductDetail({ productId }) {
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const router = useRouter();
 
+  // In ProductDetail.jsx
+const handleBackToStore = () => {
+    // Use replace instead of push to prevent going back to customization
+    router.replace('/store');
+  };
+
   useEffect(() => {
     // Check if user is logged in
     const userIdFromCookie = getCookieValue("adminLinker");
@@ -81,8 +87,8 @@ export default function ProductDetail({ productId }) {
       <div className="p-6 text-center text-red-500">
         <p>{error}</p>
         <button 
-          onClick={() => router.push('/store')} 
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+  onClick={handleBackToStore}
+  className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           Back to Store
         </button>
@@ -133,6 +139,7 @@ export default function ProductDetail({ productId }) {
             )}
           </div>
         </div>
+        
 
         {/* Product Details */}
         <div>
