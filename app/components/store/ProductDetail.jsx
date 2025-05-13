@@ -1,10 +1,10 @@
 'use client';
-//app/components/store$ ls ProductDetail.jsx 
+//app/components/store/ProductDetail.jsx 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { FiArrowLeft, FiShoppingCart, FiCheck, FiLoader, FiAlertCircle } from 'react-icons/fi';
-import { getProductById, addToCart } from '../firebase-utils';
+import { getProductById, addToCart } from './firebase-utils';
 import { toast } from 'react-hot-toast';
 import { getCookieValue } from '@utils/auth-utils';
 import CustomizationPanel from './CustomizationPanel';

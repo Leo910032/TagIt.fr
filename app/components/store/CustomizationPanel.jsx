@@ -82,8 +82,10 @@ export default function CustomizationPanel({ productType, onCustomizationChange 
   }, [productType]);
 
   useEffect(() => {
-    // Notify parent component of changes
-    onCustomizationChange(customization);
+    // Notify parent component of changes if the callback exists
+    if (typeof onCustomizationChange === 'function') {
+      onCustomizationChange(customization);
+    }
   }, [customization, onCustomizationChange]);
 
   // Load saved designs from Firebase
