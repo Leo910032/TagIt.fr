@@ -1,3 +1,4 @@
+//next.config.js
 const path = require('path');
 
 /** @type {import('next').NextConfig} */
@@ -30,9 +31,6 @@ const nextConfig = {
     };
     return config;
   },
-  experimental: {
-    appDir: true
-  }
 };
 
 module.exports = nextConfig;
