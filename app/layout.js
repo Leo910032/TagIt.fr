@@ -6,8 +6,8 @@ import NextTopLoader from "nextjs-toploader";
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Link Tree',
-  description: 'This is a Link tree Clone Web App Developed by Fabiconcept.',
+  title: 'Tapit.fr',
+  description: 'Encore en dev les pelos',
 }
 
 export default function RootLayout({ children }) {
