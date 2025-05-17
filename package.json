@@ -50,6 +50,6 @@
     "tailwindcss": "3.3.2"
   },
   "devDependencies": {
-    "@types/node": "^22.15.17"
+    "@types/node": "^22.15.18"
   }
 }

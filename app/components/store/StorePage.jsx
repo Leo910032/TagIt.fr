@@ -4,15 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
-import { FiShoppingCart, FiCheck, FiCreditCard, FiSmartphone, FiGlobe, FiTrendingUp, FiArrowRight, FiStar, FiUser, FiLogIn } from 'react-icons/fi';
+import { FiShoppingCart, FiCheck, FiCreditCard, FiSmartphone, FiGlobe, FiTrendingUp, 
+         FiArrowRight, FiStar, FiUser, FiLogIn } from 'react-icons/fi';
 import ProductGrid from './ProductGrid';
-import ProductDetail from './ProductDetail';
-import CardSelector from './CardSelector';
-import CardInfoForm from './CardInfoForm';
-import CardPreview from './CardPreview';
-import TemplateSelector from './TemplateSelector';
-import ColorCustomizer from './ColorCustomizer';
-import UploadDesign from './UploadDesign';
 import { testForActiveSession } from "@lib/authentication/testForActiveSession";
 
 // Constants for page content
@@ -64,48 +58,6 @@ export default function StorePage() {
   const router = useRouter();
   const pathname = usePathname();
   
-  // Track current step in the store flow
-  const [currentStep, setCurrentStep] = useState('home');
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  
-  // Check if we're on a product detail page
-  const isProductPage = pathname.includes('/store/product/') || pathname.includes('/store/customize/');
-  
-  // Extract product ID from the URL if we're on a product page
-  let productId = null;
-  if (isProductPage) {
-    const segments = pathname.split('/');
-    productId = segments[segments.length - 1];
-  }
-
-  // Customization state
-  const [colors, setColors] = useState({
-    background: '#ffffff',
-    text: '#000000',
-    accent: '#3b82f6'
-  });
-  const [showColorPicker, setShowColorPicker] = useState(false);
-  const [colorPickerTarget, setColorPickerTarget] = useState('');
-  const [uploadedLogo, setUploadedLogo] = useState(null);
-  const [uploadedDesign, setUploadedDesign] = useState(null);
-  const [cardInfo, setCardInfo] = useState({
-    name: '',
-    title: '',
-    company: '',
-    email: '',
-    phone: '',
-    website: ''
-  });
-  const [selectedTemplate, setSelectedTemplate] = useState({
-    id: 'minimal-light',
-    name: 'Minimal Light',
-    colors: {
-      background: '#ffffff',
-      text: '#000000',
-      accent: '#3b82f6'
-    }
-  });
-
   // Authentication state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
@@ -158,90 +110,16 @@ export default function StorePage() {
     
     checkAuth();
   }, []);
-  // In StorePage.jsx
-
-
-  // Check URL params on load to restore state
-  useEffect(() => {
-    if (isProductPage && productId) {
-      setCurrentStep('customize');
-    }
-  }, [isProductPage, productId]);
 
   // Handle login request
   const handleLoginRequest = () => {
     router.push("/login?redirect=/store");
   };
 
-  // Color customization handlers
-  const handleOpenColorPicker = (target) => {
-    setColorPickerTarget(target);
-    setShowColorPicker(true);
+  // Handle product selection
+  const handleSelectProduct = (product) => {
+    router.push(`/store/customize/${product.id}`);
   };
-
-  const handleColorChange = (color) => {
-    setColors({
-      ...colors,
-      [colorPickerTarget]: color
-    });
-  };
-
-  const handleCloseColorPicker = () => {
-    setShowColorPicker(false);
-  };
-
-  // Design upload handler
-  const handleUpload = (type, imageData) => {
-    if (type === 'logo') {
-      setUploadedLogo(imageData);
-    } else if (type === 'design') {
-      setUploadedDesign(imageData);
-    }
-  };
-
-  // Template selector handler
-  const handleSelectTemplate = (template) => {
-    setSelectedTemplate(template);
-    setColors(template.colors);
-  };
-
-  // Card selection handler
-  const handleSelectCard = (card) => {
-    setSelectedProduct(card);
-    setCurrentStep('customize');
-    
-    // Update URL without full navigation for better UX
-    if (typeof window !== 'undefined') {
-      window.history.pushState({}, '', `/store/customize/${card.id}`);
-    }
-  };
-
-  // Go back to previous step
- // In StorePage.jsx
-const handleBack = () => {
-  setCurrentStep('home');
-  setSelectedProduct(null);
-  
-  // Reset all customization state
-  setColors({
-    background: '#ffffff',
-    text: '#000000',
-    accent: '#3b82f6'
-  });
-  setUploadedLogo(null);
-  setUploadedDesign(null);
-  setCardInfo({
-    name: '',
-    title: '',
-    company: '',
-    email: '',
-    phone: '',
-    website: ''
-  });
-  
-  // Update URL
-  router.replace('/store');
-};
 
   // When showing loading state
   if (isCheckingAuth) {
@@ -251,242 +129,6 @@ const handleBack = () => {
       </div>
     );
   }
-
-  // Render store content based on current step
-  const renderStoreContent = () => {
-    // If we're on a product detail page from direct URL access
-    if (isProductPage && productId) {
-      return <ProductDetail productId={productId} />;
-    }
-
-    // When using the frontend flow
-    switch (currentStep) {
-      case 'home':
-        return (
-          <div className="space-y-20">
-            {/* Hero Section */}
-            <section className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                Smart Business Cards for the Digital Age
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Connect your physical business card to your digital presence. Order your NFC card and get instant access to your TagIt profile.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href="#product-grid"
-                  className="bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium"
-                >
-                  Order Your Card
-                </a>
-                {isLoggedIn ? (
-                  <Link 
-                    href="/dashboard"
-                    className="border border-gray-300 text-gray-700 px-8 py-3 rounded-md hover:bg-gray-50 transition-colors font-medium flex items-center justify-center gap-2"
-                  >
-                    <FiUser className="w-5 h-5" />
-                    Manage My Cards
-                  </Link>
-                ) : (
-                  <button
-                    onClick={handleLoginRequest}
-                    className="border border-gray-300 text-gray-700 px-8 py-3 rounded-md hover:bg-gray-50 transition-colors font-medium flex items-center justify-center gap-2"
-                  >
-                    <FiLogIn className="w-5 h-5" />
-                    Sign In / Register
-                  </button>
-                )}
-              </div>
-            </section>
-
-            {/* Features Section */}
-            <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {FEATURES.map((feature, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mx-auto mb-4">
-                    {feature.icon}
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600 text-sm">{feature.description}</p>
-                </div>
-              ))}
-            </section>
-
-            {/* Product Grid Section */}
-            <section id="product-grid" className="scroll-mt-24">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                  Choose Your Card Style
-                </h2>
-                <p className="mt-4 text-xl text-gray-500 max-w-2xl mx-auto">
-                  Digital networking made simple. Tap to share your contact information and online profile.
-                </p>
-              </div>
-              
-              <ProductGrid onProductSelect={handleSelectCard} />
-            </section>
-
-            {/* How It Works */}
-            <section className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 mb-12">How It Works</h2>
-              <div className="grid md:grid-cols-3 gap-8">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">
-                    1
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Order Your Card</h3>
-                  <p className="text-gray-600">Choose your material, design, and customization options</p>
-                </div>
-                <div className="relative">
-                  <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">
-                    2
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Receive & Activate</h3>
-                  <p className="text-gray-600">Get your card delivered and activate it with your TagIt profile</p>
-                </div>
-                <div className="relative">
-                  <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">
-                    3
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Share & Connect</h3>
-                  <p className="text-gray-600">Tap to share your profile instantly, anywhere, anytime</p>
-                </div>
-              </div>
-            </section>
-
-            {/* Testimonials */}
-            <section>
-              <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">What Our Customers Say</h2>
-              <div className="grid md:grid-cols-3 gap-8">
-                {TESTIMONIALS.map((testimonial, index) => (
-                  <div key={index} className="bg-white p-6 rounded-lg border shadow-sm">
-                    <div className="flex items-center gap-1 mb-3">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <FiStar key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      ))}
-                    </div>
-                    <p className="text-gray-600 mb-4 italic">&ldquo;{testimonial.text}&rdquo;</p>
-                    <div>
-                      <p className="font-medium text-gray-900">{testimonial.name}</p>
-                      <p className="text-sm text-gray-500">{testimonial.company}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* CTA Section */}
-            <section className="text-center bg-blue-600 text-white -mx-4 sm:-mx-6 lg:-mx-8 px-6 py-16 rounded-lg">
-              <h2 className="text-3xl font-bold mb-4">Ready to Go Digital?</h2>
-              <p className="text-xl mb-8 opacity-90">
-              Join thousands of professionals who&apos;ve made the switch to smart business cards
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <a
-                  href="#product-grid"
-                  className="bg-white text-blue-600 px-8 py-3 rounded-md hover:bg-blue-50 transition-colors font-medium"
-                >
-                  Order Your Card Today
-                </a>
-                {!isLoggedIn && (
-                  <button
-                    onClick={() => router.push('/signup')}
-                    className="bg-transparent border border-white text-white px-8 py-3 rounded-md hover:bg-white/10 transition-colors font-medium"
-                  >
-                    Create an Account
-                  </button>
-                )}
-              </div>
-            </section>
-          </div>
-        );
-        
-      case 'customize':
-        return (
-          <div className="max-w-6xl mx-auto">
-            <button 
-              onClick={handleBack}
-              className="flex items-center text-gray-600 hover:text-gray-900 mb-8"
-            >
-              <FiArrowRight className="rotate-180 mr-2" />
-              Back to Products
-            </button>
-            
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* Left Column: Customization Options */}
-              <div className="md:col-span-2 space-y-8">
-                <h1 className="text-3xl font-bold text-gray-900">Customize Your Card</h1>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-white p-6 rounded-lg border shadow-sm">
-                    <ColorCustomizer 
-                      colors={colors}
-                      showColorPicker={showColorPicker}
-                      colorPickerTarget={colorPickerTarget}
-                      onOpenColorPicker={handleOpenColorPicker}
-                      onColorChange={handleColorChange}
-                      onCloseColorPicker={handleCloseColorPicker}
-                    />
-                  </div>
-                  
-                  <div className="bg-white p-6 rounded-lg border shadow-sm">
-                    <TemplateSelector 
-                      selectedTemplate={selectedTemplate} 
-                      onSelectTemplate={handleSelectTemplate} 
-                    />
-                  </div>
-                </div>
-                
-                <div className="bg-white p-6 rounded-lg border shadow-sm">
-                  <UploadDesign 
-                    uploadedLogo={uploadedLogo} 
-                    uploadedDesign={uploadedDesign} 
-                    onUpload={handleUpload} 
-                  />
-                </div>
-                
-                <div className="bg-white p-6 rounded-lg border shadow-sm">
-                  <CardInfoForm 
-                    cardInfo={cardInfo} 
-                    onUpdateInfo={setCardInfo} 
-                  />
-                </div>
-                
-                <div className="bg-white p-6 rounded-lg border shadow-sm">
-                  <button
-                    onClick={() => {
-                      // In a real app, this would save the customization and add to cart
-                      router.push('/store/cart');
-                    }}
-                    className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center justify-center gap-2"
-                  >
-                    <FiShoppingCart className="w-5 h-5" />
-                    Add to Cart
-                  </button>
-                  
-                  <p className="text-sm text-gray-500 text-center mt-3">
-                    Your customization will be saved automatically
-                  </p>
-                </div>
-              </div>
-              
-              {/* Right Column: Preview */}
-              <div className="md:col-span-1">
-                <CardPreview 
-                  colors={colors} 
-                  uploadedDesign={uploadedDesign} 
-                  uploadedLogo={uploadedLogo} 
-                  cardInfo={cardInfo} 
-                />
-              </div>
-            </div>
-          </div>
-        );
-        
-      default:
-        return <div>Unknown step</div>;
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -531,7 +173,142 @@ const handleBack = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {renderStoreContent()}
+        <div className="space-y-20">
+          {/* Hero Section */}
+          <section className="text-center max-w-4xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Smart Business Cards for the Digital Age
+            </h1>
+            <p className="text-xl text-gray-600 mb-8">
+              Connect your physical business card to your digital presence. Order your NFC card and get instant access to your TagIt profile.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="#product-grid"
+                className="bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium"
+              >
+                Order Your Card
+              </a>
+              {isLoggedIn ? (
+                <Link 
+                  href="/dashboard"
+                  className="border border-gray-300 text-gray-700 px-8 py-3 rounded-md hover:bg-gray-50 transition-colors font-medium flex items-center justify-center gap-2"
+                >
+                  <FiUser className="w-5 h-5" />
+                  Manage My Cards
+                </Link>
+              ) : (
+                <button
+                  onClick={handleLoginRequest}
+                  className="border border-gray-300 text-gray-700 px-8 py-3 rounded-md hover:bg-gray-50 transition-colors font-medium flex items-center justify-center gap-2"
+                >
+                  <FiLogIn className="w-5 h-5" />
+                  Sign In / Register
+                </button>
+              )}
+            </div>
+          </section>
+
+          {/* Features Section */}
+          <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {FEATURES.map((feature, index) => (
+              <div key={index} className="text-center">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mx-auto mb-4">
+                  {feature.icon}
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                <p className="text-gray-600 text-sm">{feature.description}</p>
+              </div>
+            ))}
+          </section>
+
+          {/* Product Grid Section */}
+          <section id="product-grid" className="scroll-mt-24">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                Choose Your Card Style
+              </h2>
+              <p className="mt-4 text-xl text-gray-500 max-w-2xl mx-auto">
+                Digital networking made simple. Tap to share your contact information and online profile.
+              </p>
+            </div>
+            
+            <ProductGrid onProductSelect={handleSelectProduct} />
+          </section>
+
+          {/* How It Works */}
+          <section className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-12">How It Works</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="relative">
+                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">
+                  1
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Order Your Card</h3>
+                <p className="text-gray-600">Choose your material, design, and customization options</p>
+              </div>
+              <div className="relative">
+                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">
+                  2
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Receive & Activate</h3>
+                <p className="text-gray-600">Get your card delivered and activate it with your TagIt profile</p>
+              </div>
+              <div className="relative">
+                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">
+                  3
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Share & Connect</h3>
+                <p className="text-gray-600">Tap to share your profile instantly, anywhere, anytime</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Testimonials */}
+          <section>
+            <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">What Our Customers Say</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {TESTIMONIALS.map((testimonial, index) => (
+                <div key={index} className="bg-white p-6 rounded-lg border shadow-sm">
+                  <div className="flex items-center gap-1 mb-3">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <FiStar key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-gray-600 mb-4 italic">&ldquo;{testimonial.text}&rdquo;</p>
+                  <div>
+                    <p className="font-medium text-gray-900">{testimonial.name}</p>
+                    <p className="text-sm text-gray-500">{testimonial.company}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* CTA Section */}
+          <section className="text-center bg-blue-600 text-white -mx-4 sm:-mx-6 lg:-mx-8 px-6 py-16 rounded-lg">
+            <h2 className="text-3xl font-bold mb-4">Ready to Go Digital?</h2>
+            <p className="text-xl mb-8 opacity-90">
+              Join thousands of professionals who&apos;ve made the switch to smart business cards
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <a
+                href="#product-grid"
+                className="bg-white text-blue-600 px-8 py-3 rounded-md hover:bg-blue-50 transition-colors font-medium"
+              >
+                Order Your Card Today
+              </a>
+              {!isLoggedIn && (
+                <button
+                  onClick={() => router.push('/signup')}
+                  className="bg-transparent border border-white text-white px-8 py-3 rounded-md hover:bg-white/10 transition-colors font-medium"
+                >
+                  Create an Account
+                </button>
+              )}
+            </div>
+          </section>
+        </div>
       </main>
       
       {/* Footer */}
